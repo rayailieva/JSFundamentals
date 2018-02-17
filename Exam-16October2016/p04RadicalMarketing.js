@@ -1,27 +1,25 @@
-function solve(arr) {
+function solve(input) {
 
     let result = new Map();
 
-    for(let line of arr){
+    for (let i = 0; i < input.length; i++) {
 
-        let tokens = line.split(' - ').filter(x => x !== '');
+        let tokens = input[i].split('-').filter(x => x !== ' ');
 
-       if(tokens.length === 1){
+        if(tokens.length === 1){
 
-           let person = tokens[0];
+            let person = tokens[0];
 
-           if(!result.has(person)){
+            if(!result.has(person)){
 
-               result.set(person, {subscriber: [], subscribers: []});
-           }else{
-               continue;
-           }
+                result.set(person, {subscriber: [], subscribers: []});
+            }else{
+                continue;
+            }
+        }
+        else if(tokens.length === 2){
 
-       }
-       else if(tokens.length === 2){
-
-            let subscriber = tokens[0];
-            let subscribedTo = tokens[1];
+            let [subscriber, subscribedTo] = tokens;
 
             if(subscriber === subscribedTo){
 
@@ -29,21 +27,25 @@ function solve(arr) {
             }
             if(result.has(subscriber) && result.has(subscribedTo)){
 
-               result.get(subscribedTo).subscribers.push(subscribedTo);
-               result.get(subscriber).subscriber.push(subscribedTo);
+                result.get(subscribedTo).subscribers.push(subscriber);
+                result.get(subscriber).subscriber.push(subscribedTo);
             }
-       }
+
+        }
+
     }
 
     result = [...result].sort((a, b) => {
         "use strict";
+
         if(b[1].subscribers.length < a[1].subscribers.length) return -1;
         if (b[1].subscribers.length > a[1].subscribers.length) return 1;
         if (b[1].subscriber.length < a[1].subscriber.length) return -1;
         if (b[1].subscriber.length > a[1].subscriber.length) return 1;
     });
 
-    for(let [person, data] of result) {
+    for(let [person, data] of result){
+
         console.log(person);
 
         let count = 1;
@@ -54,19 +56,3 @@ function solve(arr) {
         return;
     }
 }
-
-
-solve([
-    'J',
-    'G',
-    'P',
-    'R',
-    'C',
-    'J-G',
-    'G-J',
-    'P-R',
-    'R-P',
-    'C-J',
-    'C-P',
-    'J-R'
-]);
